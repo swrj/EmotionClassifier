@@ -17,10 +17,12 @@ Builder.load_string('''
         orientation: 'vertical'
         Camera:
             id: camera
-            resolution: (1920, 1080)
+            resolution: (640, 480)
             play: False
+        Image:
+            id: image
         ToggleButton:
-            text: 'Play'
+            text: 'Play video feed'
             on_press: camera.play = not camera.play
             size_hint_y: None
             height: '48dp'
@@ -30,23 +32,23 @@ Builder.load_string('''
             height: '48dp'
             orientation: 'horizontal'
             Button:
-                text: 'Capture'
+                text: 'Capture an image'
                 size_hint_y: None
                 height: '48dp'
                 on_press: root.capture()
             Button:
-                text: 'load'
+                text: 'Load an image'
                 size_hint_y: None
                 height: '48dp'
                 on_press: root.show_load()
         Label:
             id: label1
-            text: 'Happy'
+            text: 'Replicate this emotion: Happiness'
             size_hint_y: None
             height: '48dp'
         Label:
             id: label2
-            text: '0'
+            text: 'Capture or load an image!'
             size_hint_y: None
             height: '48dp'
 
@@ -80,6 +82,7 @@ class LoadDialog(FloatLayout):
 class CameraClick(BoxLayout):
     emotions = ['Happiness', 'Anger', 'Fear', 'Neutral', 'Sadness', 'Surprise', 'Contempt']
     score = 0
+    emoji = 0
 
     def dismiss_popup(self):
         self._popup.dismiss()
@@ -90,14 +93,16 @@ class CameraClick(BoxLayout):
         according to their captured time and date.
         '''
         emotion_label = self.ids['label1']
-
+        img_canvas = self.ids['image']
         camera = self.ids['camera']
         camera.export_to_png("img/IMG_{}.png".format(emotion_label.text))
         print("Captured")
 
+        img_canvas.source = 'img/IMG_{}.png'.format(self.emotions[self.emoji])
+
         self.call_facial_recognition()
-        emoji = random.randint(0, 6)
-        emotion_label.text = str(self.emotions[emoji])
+        self.emoji = random.randint(0, 6)
+        emotion_label.text = str(self.emotions[self.emoji])
 
     def load(self, file_path, file):
         '''
@@ -116,8 +121,11 @@ class CameraClick(BoxLayout):
         self.dismiss_popup()
         self.call_facial_recognition()
 
-        emoji = random.randint(0, 6)
-        emotion_label.text = str(self.emotions[emoji])
+        img_canvas = self.ids['image']
+        img_canvas.source = 'img/IMG_{}.png'.format(self.emotions[self.emoji])
+
+        self.emoji = random.randint(0, 6)
+        emotion_label.text = str(self.emotions[self.emoji])
 
     def show_load(self):
         content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
