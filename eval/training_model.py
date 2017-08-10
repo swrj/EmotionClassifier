@@ -245,7 +245,7 @@ correct_prediction = tf.equal(tf.argmax(y_pred, 1), tf.argmax(y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, 'float'))
 tf.summary.scalar("Accuracy", accuracy)
 predict = tf.argmax(y_pred, 1,name="prediction")
-pred_max = tf.max(y_pred,1,name = "max_prediction")
+pred_max = tf.reduce_max(y_pred,1,name = "max_prediction")
 TRAINING_ITERATIONS = 3000
 
 DROPOUT = 0.5
