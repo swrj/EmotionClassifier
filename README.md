@@ -1,4 +1,4 @@
-# EmotionDetector
+# EmotionClassifier
 
 Python project that uses OpenCV, Sci-kit Learn, NumPy, TensorFlow and Kivy to implement machine learning and computer vision to detect emotions in faces and categorize them into seven different categories [Anger, Disgust, Fear, Happiness, Sadness, Surprise, Neutral].  
 
